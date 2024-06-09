@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      hono:
+        specifier: ^4.4.4
+        version: 4.4.4
     devDependencies:
       '@cloudflare/vitest-pool-workers':
         specifier: ^0.1.0
@@ -683,6 +687,10 @@ packages:
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
+
+  hono@4.4.4:
+    resolution: {integrity: sha512-zO5+4K8yf1iuKhBZhwmpZ/0LzPMr8Zt1RugEGM1xvOqgh9DyLb7tslOtoBks4bmm5bIcLtzLCXUpYpXOkwpABA==}
+    engines: {node: '>=16.0.0'}
 
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
@@ -1633,6 +1641,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hono@4.4.4: {}
 
   human-signals@5.0.0: {}
 

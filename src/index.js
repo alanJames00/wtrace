@@ -136,4 +136,39 @@ app.post('/referId', authWare, async (c) => {
 	}
 });
 
+// route to fetch requests by referId
+app.get('/requests/referId/:id', authWare, async (c) => {
+	try {
+		// check if the referId belongs to the username
+		//
+		const referId = c.req.param('id');
+		const username = c.get('username');
+		const { results: referIdBelongs } = await c.env.DB.prepare('SELECT * FROM Refercodes WHERE username = ? AND refer_code = ? ')
+			.bind(username, referId)
+			.all();
+
+		if (referIdBelongs.length == 0) {
+			// return unauth
+			return c.json({
+				err: 'unauthorized, the referId do not belongs to your account',
+			});
+		}
+
+		// fetch the request from Requests table
+		const { results: requestResults } = await c.env.DB.prepare('SELECT * FROM Requests WHERE refer_code = ?').bind(referId).all();
+
+		return c.json({
+			requests: requestResults,
+		});
+	} catch (e) {
+		console.log(e);
+		return c.json(
+			{
+				err: e.message,
+			},
+			500,
+		);
+	}
+});
+
 export default app;

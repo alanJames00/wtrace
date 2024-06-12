@@ -10,21 +10,11 @@ WTrace is a robust IP logging and client information tracking service powered by
 - **Request Analysis**: Record request methods (GET, POST, etc.) and URL paths.
 - **Referrer Tracking**: Track the origin of requests using the referrer header.
 - **Timestamp Logging**: Log the exact time of each request.
-- **Rate Limiting and Alerts**: Detect and alert on unusual activity patterns.
-- **Blacklist/Whitelist IPs**: Manage access with IP blacklisting and whitelisting.
-- **Real-time Dashboard**: Visualize logs with charts and graphs in real-time.
-- **Export Data**: Export logs in various formats (CSV, JSON, etc.).
-- **Email/SMS Notifications**: Receive alerts for specific events or patterns.
 - **Data Retention Policies**: Automatically delete logs after a configurable period.
 - **API Access**: Programmatically access logged data through an API.
-- **Anomaly Detection**: Identify unusual access patterns using machine learning.
-- **Custom Tags/Metadata**: Add custom tags to requests for classification.
 - **SSL/TLS Information**: Log details about the SSL/TLS connection.
 - **Response Time Logging**: Measure and log request processing times.
-- **Data Encryption**: Ensure logs are encrypted in transit and at rest.
-- **Integration with Other Services**: Connect with services like Splunk, ELK, and Datadog.
 - **User Authentication and Access Control**: Secure the dashboard and API with authentication and role-based access control.
-- **Customizable Log Storage**: Choose storage solutions that suit your needs.
 
 ## Why wtrace ?
 
@@ -42,39 +32,55 @@ wtrace uses Cloudflare's global network to capture IP addresses and client detai
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/wtrace.git
+   git clone https://github.com/alanJames00/wtrace
    cd wtrace
    ```
 
 2. **Deploy the Worker:**
 
-   - Go to the [Cloudflare dashboard](https://dash.cloudflare.com/).
-   - Select your domain.
-   - Go to the "Workers" tab.
-   - Create a new Worker and copy the script from `src/wtrace.js` into the Worker editor.
-   - Save and deploy the Worker.
+   - Install the [Wrangler CLI](https://developers.cloudflare.com/workers/cli-wrangler/install-update).
+   - Authenticate Wrangler with your Cloudflare account using `wrangler login`.
+   - Edit the `wrangler.toml` file and add your Cloudflare account ID along with the required resources.
+   - Deploy the Worker using `wrangler publish`.
 
-3. **Set Up KV Storage:**
-   - In the Cloudflare dashboard, go to "Workers" -> "KV".
-   - Create a new namespace (e.g., `logs`).
-   - Bind the namespace to your Worker by clicking on "Settings" -> "Add binding" and selecting the namespace you created.
+### API Usage
 
-## Usage
+1. **Register Username**:
 
-Once the Worker is deployed, it will automatically log IP addresses and other client details for every incoming request. You can view the logs in the Cloudflare Workers KV storage.
+- Route: `/register`
+- Method: `POST`
+- Body: `{"username": "your_username"}`
+- Response:
+  ```json
+  {
+  	"info": "user created",
+  	"apiKey": "cb463902-aeraer7c9-8050-***********"
+  }
+  ```
 
-## Configuration
+2. **Obtain Refer ID**:
 
-To customize the functionality of WTrace, edit the `src/wtrace.js` file. Here, you can add or modify the features according to your requirements.
+- Route: `/referId`
+- Method: `POST`
+- header: `x-auth-key` : `apiKey`
+- Response:
 
-## Contributing
+```json
+{
+	"referId": "98DT2AAC",
+	"info": "testuser1"
+}
+```
 
-We welcome contributions! Please fork the repository and submit a pull request with your changes. Ensure your code follows our coding standards and includes appropriate tests.
+3. **View Logs By Refer ID**:
 
-## License
+- Route: `/requests/referId/:referId`
+- Method: `GET`
+- header: `x-auth-key` : `apiKey`
+- url-params: `referId`
 
-WTrace is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+4. **View Refer IDs By Username**:
 
-## Contact
-
-For questions or support, please open an issue in the repository or contact us at support@example.com.
+- Route: `/referIds`
+- Method: `GET`
+- header: `x-auth-key` : `apiKey`

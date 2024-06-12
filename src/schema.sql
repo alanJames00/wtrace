@@ -12,3 +12,11 @@ CREATE TABLE IF NOT EXISTS Refercodes (
 	refer_code VARCHAR(255) NOT NULL
 );
 
+DROP TABLE IF EXISTS Requests;
+CREATE TABLE IF NOT EXISTS Requests (
+	refer_code VARCHAR(255) NOT NULL,
+	req_country VARCHAR(255) NOT NULL,
+	req_org_ip VARCHAR(255) NOT NULL,
+	req_user_agent VARCHAR(255) NOT NULL,
+	cf_header_raw TEXT NOT NULL
+);

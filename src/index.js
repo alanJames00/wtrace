@@ -136,6 +136,27 @@ app.post('/referId', authWare, async (c) => {
 	}
 });
 
+app.get('/referIds', authWare, async (c) => {
+	try {
+		const username = c.get('username');
+
+		// read the referIds from Refercodes table
+		const { results } = await c.env.DB.prepare('SELECT * FROM Refercodes WHERE username = ?').bind(username).all();
+
+		return c.json({
+			referIds: results,
+		});
+	} catch (e) {
+		console.log(e);
+		return c.json(
+			{
+				err: e.message,
+			},
+			500,
+		);
+	}
+});
+
 // route to fetch requests by referId
 app.get('/requests/referId/:id', authWare, async (c) => {
 	try {

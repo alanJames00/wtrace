@@ -7,10 +7,40 @@ const app = new Hono();
 // route to log the request
 app.get('/log', async (c) => {
 	try {
+		// get all the information in the headers
+
+		const referId = c.req.header('w-refer-id');
+
+		const cfHeaders = JSON.stringify(c.req.raw.cf);
+
+		const orgIp = c.req.header('CF-Connecting-IP');
+		const ipCountry = c.req.header('CF-IPCountry');
+		const userAgent = c.req.header('User-Agent');
+
+		console.log(orgIp);
+		console.log(ipCountry);
+		console.log(userAgent);
+		console.log(cfHeaders);
+		console.log(referId);
+
+		// store the data in reqeusts table
+		const { results, success } = await c.env.DB.prepare(
+			'INSERT INTO Requests (refer_code, req_country, req_org_ip, req_user_agent, cf_header_raw) VALUES (?, ?, ?, ?, ?)',
+		)
+			.bind(referId, ipCountry, orgIp, userAgent, cfHeaders)
+			.all();
+
+		if (!success) {
+			return c.json({
+				err: 'error logging request',
+			});
+		}
+
 		return c.json({
-			message: 'hello',
+			info: 'logged',
 		});
 	} catch (e) {
+		console.log(e);
 		return c.json(
 			{
 				err: e.message,

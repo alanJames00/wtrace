@@ -23,7 +23,9 @@ const authWare = async (c, next) => {
 		);
 	}
 
-	next();
+	// set the username on header
+	c.set('username', keyExist[0].username);
+	await next();
 };
 
 export default authWare;
